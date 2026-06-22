@@ -127,20 +127,26 @@ override_path = ROOT / "data" / "pos_v3_override.json"
 if override_path.exists():
     with open(override_path) as f:
         px_pos = json.load(f)
-    # Pixel coordinates from a 1800 x 900 canvas; flip y because browser y grows down
+    # Pixel coordinates from a 1800 x 900 canvas. Preserve aspect ratio so the
+    # graph stays "wide" like the paper figure (figsize 26x14) instead of being
+    # squeezed into a square.
     xs_px = [px_pos[n]["x"] for n in inds_list if n in px_pos]
     ys_px = [px_pos[n]["y"] for n in inds_list if n in px_pos]
     xmin_px, xmax_px = min(xs_px), max(xs_px)
     ymin_px, ymax_px = min(ys_px), max(ys_px)
+    span_x = xmax_px - xmin_px
+    span_y = ymax_px - ymin_px
+    # Normalize x to [0, 1] and y proportionally (so x:y = span_x:span_y)
     pos = {}
     for n in inds_list:
         if n in px_pos:
-            x = (px_pos[n]["x"] - xmin_px) / (xmax_px - xmin_px)
-            y = 1.0 - (px_pos[n]["y"] - ymin_px) / (ymax_px - ymin_px)
+            x = (px_pos[n]["x"] - xmin_px) / span_x
+            y = (ymax_px - px_pos[n]["y"]) / span_x   # flip + same scale as x
             pos[n] = (x, y)
         else:
             pos[n] = (0.5, 0.5)   # safety; won't trigger if override is complete
     layout_source = "manual_override"
+    layout_aspect = span_y / span_x  # y span as fraction of x span (≈ 0.5 for 2:1)
 else:
     pos = nx.kamada_kawai_layout(G_vis, weight="weight")
     all_pts = np.array([pos[n] for n in inds_list])
@@ -161,9 +167,12 @@ else:
     all_pts = np.array([pos[n] for n in inds_list])
     xmin, ymin = all_pts.min(axis=0)
     xmax, ymax = all_pts.max(axis=0)
-    pos = {n: ((x - xmin) / (xmax - xmin), (y - ymin) / (ymax - ymin))
+    span_x = xmax - xmin
+    span_y = ymax - ymin
+    pos = {n: ((x - xmin) / span_x, (y - ymin) / span_x)
            for n, (x, y) in pos.items()}
     layout_source = "kamada_kawai_auto"
+    layout_aspect = span_y / span_x
 
 pos_norm = {n: [round(p[0], 4), round(p[1], 4)] for n, p in pos.items()}
 print(f"    layout source: {layout_source}")
@@ -174,7 +183,8 @@ phi_dict = {ind: {k: round(float(v), 4) for k, v in phi.loc[ind].to_dict().items
 
 with open(PORTAL / "proximity.json", "w", encoding="utf-8") as f:
     json.dump({"edges": edges, "p90": round(p90, 4),
-               "positions": pos_norm, "matrix": phi_dict},
+               "positions": pos_norm, "aspect": round(layout_aspect, 4),
+               "matrix": phi_dict},
               f, ensure_ascii=False, indent=2)
 print(f"    saved {len(edges)} edges (MST={sum(1 for e in edges if e['kind']=='mst')}, "
       f"P90 extras={sum(1 for e in edges if e['kind']=='p90')})")

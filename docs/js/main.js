@@ -184,18 +184,18 @@ function renderIndicatorSpace() {
 
   const minICI = Math.min(...inds.map(d => d.ICI));
   const maxICI = Math.max(...inds.map(d => d.ICI));
-  const sizeFor = ici => 14 + ((ici - minICI) / (maxICI - minICI)) * 34;
+  const sizeFor = ici => 12 + ((ici - minICI) / (maxICI - minICI)) * 44;
 
-  // First: a halo layer (larger, pastel) — drawn for every cluster as one trace
+  // Thin halo around each node (matches paper's figure)
   const haloTrace = {
     x: inds.map(d => pos[d.ind][0]),
     y: inds.map(d => pos[d.ind][1]),
     mode: "markers", type: "scatter",
     marker: {
-      size: inds.map(d => sizeFor(d.ICI) * 1.45),
+      size: inds.map(d => sizeFor(d.ICI) * 1.20),
       color: inds.map(d =>
         !specs ? CLUSTER_HALO[d.cluster]
-               : specs.has(d.ind) ? CLUSTER_HALO[d.cluster] : "rgba(220,220,220,0.35)"),
+               : specs.has(d.ind) ? CLUSTER_HALO[d.cluster] : "rgba(220,220,220,0.25)"),
       line: {width: 0},
     },
     hoverinfo: "skip", showlegend: false,
@@ -258,11 +258,13 @@ function renderIndicatorSpace() {
     });
   }
 
+  const aspect = DATA.proximity.aspect || 0.55;
   const layout = {
     showlegend: true,
     legend: {orientation: "h", x: 0, y: -0.05, font: {size: 11}},
-    xaxis: {visible: false, range: [-0.08, 1.08]},
-    yaxis: {visible: false, range: [-0.08, 1.08], scaleanchor: "x"},
+    xaxis: {visible: false, range: [-0.05, 1.05]},
+    yaxis: {visible: false, range: [-0.05 * aspect, aspect + 0.05 * aspect],
+            scaleanchor: "x", scaleratio: 1},
     margin: {t: 20, l: 20, r: 20, b: 80},
     paper_bgcolor: "white",
     plot_bgcolor: "#fafafa",
