@@ -1,0 +1,46 @@
+{
+  "title": "Unlocking Economic Freedom",
+  "subtitle": "Prioritizing institutional reforms in developing countries through economic complexity",
+  "author": "Kuanysh Zhaikov",
+  "affiliation": "Desht Lab, Astana, Kazakhstan",
+  "email": "k.zhaik@desht.org",
+  "year": 2026,
+  "data_source": "Economic Freedom of the World 2025 Annual Report (Fraser Institute), 2023 cross-section",
+  "n_countries": 165,
+  "n_indicators": 45,
+  "total_specializations": 3151,
+  "density_pct": 42.4,
+  "p90_phi": 0.6252,
+  "clusters": [
+    {
+      "label": "1A",
+      "name": "Rule of Law — core",
+      "mean_ICI": 3.45,
+      "color": "#0d2c5e"
+    },
+    {
+      "label": "1B",
+      "name": "Openness & Security",
+      "mean_ICI": 2.98,
+      "color": "#1c5cb5"
+    },
+    {
+      "label": "2A",
+      "name": "Regulation & Trade Barriers",
+      "mean_ICI": 2.34,
+      "color": "#d97706"
+    },
+    {
+      "label": "2B",
+      "name": "Monetary System",
+      "mean_ICI": 1.93,
+      "color": "#eab308"
+    },
+    {
+      "label": "3",
+      "name": "Residual (fiscal + labor)",
+      "mean_ICI": 1.25,
+      "color": "#6b7280"
+    }
+  ]
+}

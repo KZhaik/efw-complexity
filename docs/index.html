@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unlocking Economic Freedom — Zhaikov 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="title-block">
+      <h1>Unlocking Economic Freedom</h1>
+      <p class="subtitle">Prioritizing institutional reforms in developing countries through economic complexity</p>
+      <p class="byline">Kuanysh Zhaikov · Desht Lab · Astana, 2026</p>
+    </div>
+  </div>
+  <nav>
+    <a href="#" data-tab="home" class="active">Home</a>
+    <a href="#" data-tab="ici">ICI Hierarchy</a>
+    <a href="#" data-tab="space">Indicator Space</a>
+    <a href="#" data-tab="map">World Map</a>
+    <a href="#" data-tab="country">Country Detail</a>
+    <a href="#" data-tab="methods">Methodology</a>
+  </nav>
+</header>
+
+<main>
+
+<!-- ────────────────────────── HOME ────────────────────────── -->
+<section id="home" class="tab active">
+  <h2>Overview</h2>
+  <p class="lead">
+    This portal accompanies the working paper <em>"Unlocking Economic Freedom"</em>.
+    It applies Hidalgo &amp; Hausmann's economic complexity methodology to
+    institutional indicators (Fraser EFW, 2023) to produce a data-driven hierarchy
+    of indicators by complexity, a network space of institutional similarities,
+    and a country-level framework for reform prioritization.
+  </p>
+
+  <div class="stats">
+    <div class="stat"><span class="stat-num" id="stat-countries">165</span><span class="stat-label">countries</span></div>
+    <div class="stat"><span class="stat-num" id="stat-indicators">45</span><span class="stat-label">indicators</span></div>
+    <div class="stat"><span class="stat-num" id="stat-specs">3 151</span><span class="stat-label">specializations</span></div>
+    <div class="stat"><span class="stat-num" id="stat-density">42.4%</span><span class="stat-label">matrix density</span></div>
+  </div>
+
+  <h3>What you can do here</h3>
+  <ul class="nav-list">
+    <li><a href="#" data-tab="ici"><strong>ICI Hierarchy</strong></a> — see the 45 EFW indicators ranked by complexity, with cluster assignment</li>
+    <li><a href="#" data-tab="space"><strong>Indicator Space</strong></a> — interactive network graph of indicators, with optional country overlay</li>
+    <li><a href="#" data-tab="map"><strong>World Map</strong></a> — choropleth of Country Complexity Index (CCI) for all 165 countries</li>
+    <li><a href="#" data-tab="country"><strong>Country Detail</strong></a> — pick a country, see its 45 indicators with current scores, density, and reform priorities</li>
+    <li><a href="#" data-tab="methods"><strong>Methodology</strong></a> — short technical summary and link to replication code</li>
+  </ul>
+
+  <h3>Citation</h3>
+  <p class="cite">
+    Zhaikov, K. (2026). <em>Unlocking Economic Freedom: Prioritizing institutional reforms in developing countries through economic complexity</em>. Working paper, Desht Lab. SSRN.
+  </p>
+
+  <p class="note">
+    Data source: Gwartney, J., Lawson, R., Hall, J., &amp; Murphy, R. (2025).
+    <em>Economic Freedom of the World: 2025 Annual Report</em>. Fraser Institute.
+    Cross-section used here is the 2023 edition.
+  </p>
+</section>
+
+<!-- ────────────────────────── ICI HIERARCHY ────────────────────────── -->
+<section id="ici" class="tab">
+  <h2>Indicator Complexity Index (ICI)</h2>
+  <p class="lead">
+    The 45 EFW indicators ranked by complexity, computed via the eigenvalue
+    method on the binary specialization matrix and rescaled so weights sum
+    to 100. The hierarchy is content-meaningful: rule-of-law indicators at
+    the top, fiscal indicators at the bottom.
+  </p>
+
+  <div class="controls">
+    <label>Filter cluster:
+      <select id="ici-cluster-filter">
+        <option value="">All clusters</option>
+        <option value="1A">1A — Rule of Law (core)</option>
+        <option value="1B">1B — Openness &amp; Security</option>
+        <option value="2A">2A — Regulation &amp; Trade Barriers</option>
+        <option value="2B">2B — Monetary System</option>
+        <option value="3">3 — Residual (fiscal + labor)</option>
+      </select>
+    </label>
+    <label>Sort by:
+      <select id="ici-sort">
+        <option value="ICI">ICI (desc)</option>
+        <option value="ICI_asc">ICI (asc)</option>
+        <option value="ubiquity">Ubiquity</option>
+        <option value="cluster">Cluster</option>
+      </select>
+    </label>
+  </div>
+
+  <div id="ici-table"></div>
+</section>
+
+<!-- ────────────────────────── INDICATOR SPACE ────────────────────────── -->
+<section id="space" class="tab">
+  <h2>Indicator Space</h2>
+  <p class="lead">
+    Network graph of 45 EFW indicators, built as a Maximum Spanning Tree of the
+    proximity matrix plus all edges with φ ≥ P90. Node size is proportional to
+    ICI; colour shows cluster. Optionally overlay a country's specialization
+    pattern.
+  </p>
+
+  <div class="controls">
+    <label>Highlight country:
+      <select id="space-country-select">
+        <option value="">(none)</option>
+      </select>
+    </label>
+  </div>
+
+  <div id="space-plot" style="width:100%; height:700px;"></div>
+  <p class="caption">Hover for indicator details. Bold-colored nodes are specializations of the selected country.</p>
+</section>
+
+<!-- ────────────────────────── WORLD MAP ────────────────────────── -->
+<section id="map" class="tab">
+  <h2>Country Complexity — World Map</h2>
+  <p class="lead">
+    Choropleth of CCI (Country Complexity Index) across 165 countries.
+    Hover for country details: rank, CCI, diversity, GDP per capita.
+  </p>
+
+  <div class="controls">
+    <label>Metric:
+      <select id="map-metric">
+        <option value="CCI">CCI — share-based (paper's primary)</option>
+        <option value="CCI_hidalgo">CCI — classical Hidalgo (for reference)</option>
+        <option value="diversity">Diversity (basket size)</option>
+      </select>
+    </label>
+  </div>
+
+  <div id="map-plot" style="width:100%; height:600px;"></div>
+</section>
+
+<!-- ────────────────────────── COUNTRY DETAIL ────────────────────────── -->
+<section id="country" class="tab">
+  <h2>Country Detail</h2>
+  <p class="lead">
+    Select a country to see its 45 indicators with current EFW score,
+    Jenks threshold for specialization, current proximity to that threshold,
+    and a reform-priority score combining ICI × density × frac_of_threshold.
+  </p>
+
+  <div class="controls">
+    <label>Country:
+      <select id="country-select">
+        <option value="">— select country —</option>
+      </select>
+    </label>
+  </div>
+
+  <div id="country-summary"></div>
+  <div id="country-priorities"></div>
+  <div id="country-full-table"></div>
+</section>
+
+<!-- ────────────────────────── METHODOLOGY ────────────────────────── -->
+<section id="methods" class="tab">
+  <h2>Methodology — short version</h2>
+
+  <h3>1. Data</h3>
+  <p>
+    Fraser EFW 2025 Annual Report, 2023 cross-section: 165 countries × 45 leaf
+    indicators (pillar aggregates excluded to avoid double counting).
+  </p>
+
+  <h3>2. Binary specialization matrix M</h3>
+  <p>
+    For each indicator, the distribution across countries is classified by Jenks
+    Natural Breaks with n=3 classes. A country specializes (<code>M[c,i]=1</code>)
+    if its raw score exceeds the lower bound of the top class. Jenks adapts to
+    each indicator's distribution; fixed thresholds (e.g. ≥ 7) misbehave because
+    the maxima of some indicators are below 7.
+  </p>
+
+  <h3>3. Indicator Complexity Index (ICI)</h3>
+  <p>
+    Eigenvalue method on the doubly-normalized matrix
+    <code>M^pp' = M^T (M / diversity) / ubiquity</code>: the second-largest
+    eigenvector becomes the raw ICI. Sign is fixed so high ubiquity maps to low
+    ICI. Paper's variant: shift to non-negative and rescale so weights sum to
+    100.
+  </p>
+
+  <h3>4. Country Complexity Index (CCI)</h3>
+  <p>
+    <code>CCI[c] = sum_i M[c,i] × ICI[i]</code>. With ICI summing to 100, CCI is
+    bounded [0, 100] and reads as "% of maximum complexity captured". Departure
+    from classical Hidalgo (z-scored eigenvector): unbounded broad baskets are
+    not penalized with negative ICI weights.
+  </p>
+
+  <h3>5. Proximity matrix φ</h3>
+  <p>
+    <code>φ[i,j] = #(countries with both i and j) / max(ubiquity[i], ubiquity[j])</code>.
+    Symmetric; max-normalization is more conservative than the min variant
+    used by some authors.
+  </p>
+
+  <h3>6. Indicator clustering (Table 4)</h3>
+  <p>
+    Indicators with max φ &lt; 0.50 form a basket. On the remaining core,
+    a MST + P90 graph is built; shortest-path distances feed into Ward k=3
+    clustering. The smallest cluster merges with the basket as residual.
+    The two larger clusters are split via Ward k=2 into A/B halves (A = higher
+    mean ICI). Final labels 1A/1B/2A/2B/3 are assigned by descending mean ICI.
+  </p>
+
+  <h3>7. Density (probability of progress)</h3>
+  <p>
+    <code>density[c,i] = sum_{j≠i} φ[i,j] × M[c,j] / sum_{j≠i} φ[i,j]</code>.
+    Diagonal of φ is excluded so an indicator never counts as its own neighbor.
+  </p>
+
+  <h3>8. Reform priority score</h3>
+  <p>
+    For each (country, indicator) pair where the country is not yet specialized:
+    <code>score = ICI × density × frac_of_threshold</code>, where
+    <code>frac_of_threshold = raw_score / Jenks_threshold</code>.
+    Higher score = simultaneously high complexity, structural reachability,
+    and current closeness to specialization.
+  </p>
+
+  <h3>Replication</h3>
+  <p>
+    Full Python replication code: <a href="https://github.com/KZhaik/efw-complexity" target="_blank">github.com/KZhaik/efw-complexity</a>.
+    A single <code>complexity_analysis.py</code> reproduces every figure in the
+    paper from the raw EFW workbook.
+  </p>
+</section>
+
+</main>
+
+<footer>
+  <p>© 2026 Kuanysh Zhaikov · Desht Lab · <a href="mailto:k.zhaik@desht.org">k.zhaik@desht.org</a> · <a href="https://github.com/KZhaik/efw-complexity" target="_blank">GitHub repository</a></p>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

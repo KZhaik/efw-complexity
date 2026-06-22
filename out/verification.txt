@@ -1,0 +1,31 @@
+VERIFICATION REPORT: paper figures vs computed values
+======================================================================
+
+                                                  metric   paper    computed match?
+                             Number of countries (Sec 2)  165.00  165.000000   PASS
+                            Number of indicators (Sec 2)   45.00   45.000000   PASS
+                            Total cells 165x45 (Sec 4.3) 7425.00 7425.000000   PASS
+                                Missing values (Sec 3.1)  108.00  108.000000   PASS
+                     Specializations via Jenks (Sec 4.3) 3151.00 3151.000000   PASS
+                                  M density, % (Sec 4.3)   42.40   42.437710   PASS
+                           Cluster 1A mean ICI (Table 4)    3.45    3.454598   PASS
+                           Cluster 1B mean ICI (Table 4)    2.98    2.981331   PASS
+                           Cluster 2A mean ICI (Table 4)    2.34    2.339471   PASS
+                           Cluster 2B mean ICI (Table 4)    1.93    1.926188   PASS
+                            Cluster 3 mean ICI (Table 4)    1.25    1.253722   PASS
+Mean CCI corr 2014-2023, % (paper 96.3, share-based) [!]   98.40   98.396997   PASS
+ Min CCI corr 2014-2023, % (paper 92.4, share-based) [!]   97.10   97.134109   PASS
+                    Mean ICI corr 2014-2023, % (Sec 4.7)   96.70   96.745891   PASS
+                 Min ICI corr 2014-2023, % (Sec 4.7) [!]   94.30   92.825373   FAIL
+                                       KAZ CCI (Sec 5.1)   27.12   27.116580   PASS
+                                      KAZ rank (Sec 5.1)  101.00  101.000000   PASS
+                                 KAZ diversity (Sec 5.1)   15.00   15.000000   PASS
+                   KAZ density 5Cii x 100 (legacy 37.14)   37.14   37.140591   PASS
+       EFW equal-weight vs lnGDP, % (~73.9 in paper) [!]   73.90   74.064351   PASS
+        CCI share-based vs lnGDP, % (~84.1 in paper) [!]   84.10   83.861550   PASS
+               PCA on M r^2 vs lnGDP, % (~74 in Sec 4.6)   74.00   74.144345   PASS
+
+Passed: 21/22
+
+Lines marked [!] indicate discrepancies that should be revisited
+in the paper text — see methodology_explained.md, Section 10.

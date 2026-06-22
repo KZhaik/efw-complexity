@@ -1,0 +1,407 @@
+[
+  {
+    "ind": "i16",
+    "title": "2F Contracts",
+    "cluster": "1A",
+    "ICI": 3.881,
+    "ICI_hidalgo": 1.913,
+    "ubiquity": 25,
+    "rank": 1
+  },
+  {
+    "ind": "i12",
+    "title": "2B Impartial courts",
+    "cluster": "1A",
+    "ICI": 3.56,
+    "ICI_hidalgo": 1.542,
+    "ubiquity": 35,
+    "rank": 2
+  },
+  {
+    "ind": "i13",
+    "title": "2C Property rights",
+    "cluster": "1A",
+    "ICI": 3.553,
+    "ICI_hidalgo": 1.535,
+    "ubiquity": 40,
+    "rank": 3
+  },
+  {
+    "ind": "i11",
+    "title": "2A Judicial independence",
+    "cluster": "1A",
+    "ICI": 3.55,
+    "ICI_hidalgo": 1.532,
+    "ubiquity": 38,
+    "rank": 4
+  },
+  {
+    "ind": "i15",
+    "title": "2E Legal integrity",
+    "cluster": "1A",
+    "ICI": 3.419,
+    "ICI_hidalgo": 1.38,
+    "ubiquity": 45,
+    "rank": 5
+  },
+  {
+    "ind": "i35",
+    "title": "4Di Financial openness",
+    "cluster": "1B",
+    "ICI": 3.3,
+    "ICI_hidalgo": 1.243,
+    "ubiquity": 51,
+    "rank": 6
+  },
+  {
+    "ind": "i58",
+    "title": "5Di Market openness",
+    "cluster": "1B",
+    "ICI": 3.258,
+    "ICI_hidalgo": 1.194,
+    "ubiquity": 51,
+    "rank": 7
+  },
+  {
+    "ind": "i55",
+    "title": "5Ciii Impartial Public Administration",
+    "cluster": "1A",
+    "ICI": 3.255,
+    "ICI_hidalgo": 1.191,
+    "ubiquity": 46,
+    "rank": 8
+  },
+  {
+    "ind": "i18",
+    "title": "2H Police and crime",
+    "cluster": "1B",
+    "ICI": 3.241,
+    "ICI_hidalgo": 1.175,
+    "ubiquity": 52,
+    "rank": 9
+  },
+  {
+    "ind": "i38",
+    "title": "4Div Protection of Foreign Assets",
+    "cluster": "1B",
+    "ICI": 3.153,
+    "ICI_hidalgo": 1.074,
+    "ubiquity": 53,
+    "rank": 10
+  },
+  {
+    "ind": "i14",
+    "title": "2D Military interference",
+    "cluster": "1B",
+    "ICI": 3.005,
+    "ICI_hidalgo": 0.903,
+    "ubiquity": 58,
+    "rank": 11
+  },
+  {
+    "ind": "i56",
+    "title": "5Civ Tax compliance",
+    "cluster": "1A",
+    "ICI": 2.964,
+    "ICI_hidalgo": 0.855,
+    "ubiquity": 41,
+    "rank": 12
+  },
+  {
+    "ind": "i54",
+    "title": "5Cii Bureaucracy costs",
+    "cluster": "2A",
+    "ICI": 2.761,
+    "ICI_hidalgo": 0.621,
+    "ubiquity": 79,
+    "rank": 13
+  },
+  {
+    "ind": "i31",
+    "title": "4Bi Non-tariff trade barriers",
+    "cluster": "2A",
+    "ICI": 2.689,
+    "ICI_hidalgo": 0.538,
+    "ubiquity": 77,
+    "rank": 14
+  },
+  {
+    "ind": "i60",
+    "title": "5Diii Distortion of business environment",
+    "cluster": "2A",
+    "ICI": 2.676,
+    "ICI_hidalgo": 0.523,
+    "ubiquity": 72,
+    "rank": 15
+  },
+  {
+    "ind": "i51",
+    "title": "5Bvii Foreign Labor",
+    "cluster": "1B",
+    "ICI": 2.662,
+    "ICI_hidalgo": 0.507,
+    "ubiquity": 51,
+    "rank": 16
+  },
+  {
+    "ind": "i32",
+    "title": "4Bii Costs of importing and exporting",
+    "cluster": "2A",
+    "ICI": 2.629,
+    "ICI_hidalgo": 0.47,
+    "ubiquity": 79,
+    "rank": 17
+  },
+  {
+    "ind": "i53",
+    "title": "5Ci Regulatory Burden",
+    "cluster": "3",
+    "ICI": 2.457,
+    "ICI_hidalgo": 0.271,
+    "ubiquity": 24,
+    "rank": 18
+  },
+  {
+    "ind": "i28",
+    "title": "4Aii Mean tariff rate",
+    "cluster": "2B",
+    "ICI": 2.359,
+    "ICI_hidalgo": 0.158,
+    "ubiquity": 95,
+    "rank": 19
+  },
+  {
+    "ind": "i36",
+    "title": "4Dii Capital controls",
+    "cluster": "1B",
+    "ICI": 2.25,
+    "ICI_hidalgo": 0.032,
+    "ubiquity": 41,
+    "rank": 20
+  },
+  {
+    "ind": "i25",
+    "title": "3D Foreign currency bank accounts",
+    "cluster": "2B",
+    "ICI": 2.155,
+    "ICI_hidalgo": -0.077,
+    "ubiquity": 102,
+    "rank": 21
+  },
+  {
+    "ind": "i9",
+    "title": "1E State ownership",
+    "cluster": "2A",
+    "ICI": 2.146,
+    "ICI_hidalgo": -0.088,
+    "ubiquity": 76,
+    "rank": 22
+  },
+  {
+    "ind": "i43",
+    "title": "5Aiii Interest rate controls",
+    "cluster": "2A",
+    "ICI": 2.097,
+    "ICI_hidalgo": -0.144,
+    "ubiquity": 90,
+    "rank": 23
+  },
+  {
+    "ind": "i27",
+    "title": "4Ai Trade tax revenue",
+    "cluster": "2B",
+    "ICI": 2.055,
+    "ICI_hidalgo": -0.193,
+    "ubiquity": 112,
+    "rank": 24
+  },
+  {
+    "ind": "i5",
+    "title": "1C Government investment",
+    "cluster": "2A",
+    "ICI": 2.021,
+    "ICI_hidalgo": -0.232,
+    "ubiquity": 81,
+    "rank": 25
+  },
+  {
+    "ind": "i37",
+    "title": "4Diii Freedom of foreigners to visit",
+    "cluster": "2B",
+    "ICI": 1.972,
+    "ICI_hidalgo": -0.289,
+    "ubiquity": 101,
+    "rank": 26
+  },
+  {
+    "ind": "i47",
+    "title": "5Biii Flexible wage determination",
+    "cluster": "3",
+    "ICI": 1.882,
+    "ICI_hidalgo": -0.393,
+    "ubiquity": 48,
+    "rank": 27
+  },
+  {
+    "ind": "i24",
+    "title": "3C Inflation",
+    "cluster": "2B",
+    "ICI": 1.87,
+    "ICI_hidalgo": -0.406,
+    "ubiquity": 97,
+    "rank": 28
+  },
+  {
+    "ind": "i29",
+    "title": "4Aiii SD of tariff rates",
+    "cluster": "2B",
+    "ICI": 1.865,
+    "ICI_hidalgo": -0.412,
+    "ubiquity": 97,
+    "rank": 29
+  },
+  {
+    "ind": "i23",
+    "title": "3B SD of inflation",
+    "cluster": "2B",
+    "ICI": 1.831,
+    "ICI_hidalgo": -0.451,
+    "ubiquity": 118,
+    "rank": 30
+  },
+  {
+    "ind": "i22",
+    "title": "3A Money growth",
+    "cluster": "2B",
+    "ICI": 1.823,
+    "ICI_hidalgo": -0.46,
+    "ubiquity": 130,
+    "rank": 31
+  },
+  {
+    "ind": "i41",
+    "title": "5Ai Ownership of banks",
+    "cluster": "2B",
+    "ICI": 1.809,
+    "ICI_hidalgo": -0.477,
+    "ubiquity": 105,
+    "rank": 32
+  },
+  {
+    "ind": "i42",
+    "title": "5Aii Private sector credit",
+    "cluster": "2B",
+    "ICI": 1.793,
+    "ICI_hidalgo": -0.495,
+    "ubiquity": 114,
+    "rank": 33
+  },
+  {
+    "ind": "i59",
+    "title": "5Dii Business Permits",
+    "cluster": "2A",
+    "ICI": 1.696,
+    "ICI_hidalgo": -0.607,
+    "ubiquity": 82,
+    "rank": 34
+  },
+  {
+    "ind": "i34",
+    "title": "4C Black market exchange rates",
+    "cluster": "2B",
+    "ICI": 1.655,
+    "ICI_hidalgo": -0.654,
+    "ubiquity": 149,
+    "rank": 35
+  },
+  {
+    "ind": "i50",
+    "title": "5Bvi Conscription",
+    "cluster": "3",
+    "ICI": 1.561,
+    "ICI_hidalgo": -0.763,
+    "ubiquity": 96,
+    "rank": 36
+  },
+  {
+    "ind": "i45",
+    "title": "5Bi Labor regulations and min wage",
+    "cluster": "3",
+    "ICI": 1.485,
+    "ICI_hidalgo": -0.851,
+    "ubiquity": 40,
+    "rank": 37
+  },
+  {
+    "ind": "i17",
+    "title": "2G Real property",
+    "cluster": "3",
+    "ICI": 1.281,
+    "ICI_hidalgo": -1.085,
+    "ubiquity": 67,
+    "rank": 38
+  },
+  {
+    "ind": "i6",
+    "title": "1Di Top marginal income tax rate",
+    "cluster": "3",
+    "ICI": 1.231,
+    "ICI_hidalgo": -1.143,
+    "ubiquity": 64,
+    "rank": 39
+  },
+  {
+    "ind": "i48",
+    "title": "5Biv Hours Regulations",
+    "cluster": "3",
+    "ICI": 1.22,
+    "ICI_hidalgo": -1.156,
+    "ubiquity": 29,
+    "rank": 40
+  },
+  {
+    "ind": "i49",
+    "title": "5Bv Cost of worker dismissal",
+    "cluster": "3",
+    "ICI": 1.156,
+    "ICI_hidalgo": -1.23,
+    "ubiquity": 58,
+    "rank": 41
+  },
+  {
+    "ind": "i7",
+    "title": "1Dii Top marginal income and payroll tax rate",
+    "cluster": "3",
+    "ICI": 1.001,
+    "ICI_hidalgo": -1.409,
+    "ubiquity": 62,
+    "rank": 42
+  },
+  {
+    "ind": "i46",
+    "title": "5Bii Hiring and firing",
+    "cluster": "3",
+    "ICI": 0.998,
+    "ICI_hidalgo": -1.412,
+    "ubiquity": 39,
+    "rank": 43
+  },
+  {
+    "ind": "i4",
+    "title": "1B Transfers and subsidies",
+    "cluster": "3",
+    "ICI": 0.774,
+    "ICI_hidalgo": -1.67,
+    "ubiquity": 93,
+    "rank": 44
+  },
+  {
+    "ind": "i3",
+    "title": "1A Government consumption",
+    "cluster": "3",
+    "ICI": 0.0,
+    "ICI_hidalgo": -2.563,
+    "ubiquity": 48,
+    "rank": 45
+  }
+]
