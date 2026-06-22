@@ -16,31 +16,31 @@
       "label": "1A",
       "name": "Rule of Law — core",
       "mean_ICI": 3.45,
-      "color": "#0d2c5e"
+      "color": "#7B0000"
     },
     {
       "label": "1B",
       "name": "Openness & Security",
       "mean_ICI": 2.98,
-      "color": "#1c5cb5"
+      "color": "#FF1744"
     },
     {
       "label": "2A",
       "name": "Regulation & Trade Barriers",
       "mean_ICI": 2.34,
-      "color": "#d97706"
+      "color": "#002171"
     },
     {
       "label": "2B",
       "name": "Monetary System",
       "mean_ICI": 1.93,
-      "color": "#eab308"
+      "color": "#448AFF"
     },
     {
       "label": "3",
       "name": "Residual (fiscal + labor)",
       "mean_ICI": 1.25,
-      "color": "#6b7280"
+      "color": "#9E9E9E"
     }
   ]
 }

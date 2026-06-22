@@ -2,12 +2,13 @@
 // EFW COMPLEXITY PORTAL — frontend logic
 // ═══════════════════════════════════════════════════════════════════════════
 
+// Paper's palette: Rule of Law in reds, Trade/Regulation in blues, Other grey
 const CLUSTER_COLORS = {
-  "1A": "#0d2c5e",
-  "1B": "#1c5cb5",
-  "2A": "#d97706",
-  "2B": "#eab308",
-  "3":  "#6b7280",
+  "1A": "#7B0000",   // dark maroon — Rule of Law core
+  "1B": "#FF1744",   // vivid red   — Openness & Security
+  "2A": "#002171",   // dark navy   — Regulation & Trade barriers
+  "2B": "#448AFF",   // vivid blue  — Monetary system
+  "3":  "#9E9E9E",   // grey        — Residual
 };
 const CLUSTER_NAMES = {
   "1A": "Rule of Law — core",
@@ -195,7 +196,8 @@ function renderIndicatorSpace() {
 
 function setupIndicatorSpace() {
   const sel = document.getElementById("space-country-select");
-  DATA.countries.forEach(c => {
+  const sorted = DATA.countries.slice().sort((a, b) => a.name.localeCompare(b.name));
+  sorted.forEach(c => {
     const opt = document.createElement("option");
     opt.value = c.code;
     opt.textContent = `${c.name} (${c.code})`;
@@ -387,7 +389,8 @@ function renderCountryDetail(code) {
 
 function setupCountryDetail() {
   const sel = document.getElementById("country-select");
-  DATA.countries.forEach(c => {
+  const sorted = DATA.countries.slice().sort((a, b) => a.name.localeCompare(b.name));
+  sorted.forEach(c => {
     const opt = document.createElement("option");
     opt.value = c.code;
     opt.textContent = `${c.name} (${c.code})`;

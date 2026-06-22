@@ -120,38 +120,53 @@ for u, v, d in G_vis.edges(data=True):
     kind = "mst" if frozenset((u, v)) in mst_pairs else "p90"
     edges.append({"source": u, "target": v, "phi": round(d["weight"], 4), "kind": kind})
 
-# Kamada-Kawai layout on the visualisation graph (deterministic given a seed)
-# Run several rotations and keep the one that elongates horizontally
-pos = nx.kamada_kawai_layout(G_vis, weight="weight")
+# Layout for the indicator space. We prefer the hand-tuned override
+# (pos_v3_override.json — pixel coordinates from the paper's final figure).
+# Otherwise we fall back to a Kamada-Kawai layout with PCA alignment.
+override_path = ROOT / "data" / "pos_v3_override.json"
+if override_path.exists():
+    with open(override_path) as f:
+        px_pos = json.load(f)
+    # Pixel coordinates from a 1800 x 900 canvas; flip y because browser y grows down
+    xs_px = [px_pos[n]["x"] for n in inds_list if n in px_pos]
+    ys_px = [px_pos[n]["y"] for n in inds_list if n in px_pos]
+    xmin_px, xmax_px = min(xs_px), max(xs_px)
+    ymin_px, ymax_px = min(ys_px), max(ys_px)
+    pos = {}
+    for n in inds_list:
+        if n in px_pos:
+            x = (px_pos[n]["x"] - xmin_px) / (xmax_px - xmin_px)
+            y = 1.0 - (px_pos[n]["y"] - ymin_px) / (ymax_px - ymin_px)
+            pos[n] = (x, y)
+        else:
+            pos[n] = (0.5, 0.5)   # safety; won't trigger if override is complete
+    layout_source = "manual_override"
+else:
+    pos = nx.kamada_kawai_layout(G_vis, weight="weight")
+    all_pts = np.array([pos[n] for n in inds_list])
+    center  = all_pts.mean(axis=0)
+    pts_c   = all_pts - center
+    cov     = np.cov(pts_c.T)
+    eigvals, eigvecs = np.linalg.eigh(cov)
+    main_vec = eigvecs[:, np.argmax(eigvals)]
+    angle = -np.arctan2(main_vec[1], main_vec[0])
+    ca, sa = np.cos(angle), np.sin(angle)
+    R = np.array([[ca, -sa], [sa, ca]])
+    pos = {n: tuple(R @ (np.array(pos[n]) - center)) for n in inds_list}
+    ind_to_cluster_tmp = {r["ind"]: r["cluster"] for r in indicators}
+    xs = {cl: np.mean([pos[i][0] for i in inds_list if ind_to_cluster_tmp[i] == cl])
+          for cl in ["1A", "3"]}
+    if xs["1A"] < xs["3"]:
+        pos = {n: (-x, y) for n, (x, y) in pos.items()}
+    all_pts = np.array([pos[n] for n in inds_list])
+    xmin, ymin = all_pts.min(axis=0)
+    xmax, ymax = all_pts.max(axis=0)
+    pos = {n: ((x - xmin) / (xmax - xmin), (y - ymin) / (ymax - ymin))
+           for n, (x, y) in pos.items()}
+    layout_source = "kamada_kawai_auto"
 
-# Rotate so the main variance axis is horizontal (PCA alignment)
-all_pts = np.array([pos[n] for n in inds_list])
-center  = all_pts.mean(axis=0)
-pts_c   = all_pts - center
-cov     = np.cov(pts_c.T)
-eigvals, eigvecs = np.linalg.eigh(cov)
-main_vec = eigvecs[:, np.argmax(eigvals)]
-angle = -np.arctan2(main_vec[1], main_vec[0])
-ca, sa = np.cos(angle), np.sin(angle)
-R = np.array([[ca, -sa], [sa, ca]])
-pos = {n: tuple(R @ (np.array(pos[n]) - center)) for n in inds_list}
-
-# Map indicator -> cluster from precomputed clusters file
-ind_to_cluster = {r["ind"]: r["cluster"] for r in indicators}
-
-# Orient so cluster 1A (Rule of Law core) is on the right side
-xs = {cl: np.mean([pos[i][0] for i in inds_list if ind_to_cluster[i] == cl])
-      for cl in ["1A", "3"]}
-if xs["1A"] < xs["3"]:
-    pos = {n: (-x, y) for n, (x, y) in pos.items()}
-
-# Normalize to [0, 1] for the frontend
-all_pts = np.array([pos[n] for n in inds_list])
-xmin, ymin = all_pts.min(axis=0)
-xmax, ymax = all_pts.max(axis=0)
-pos_norm = {n: [round((x - xmin) / (xmax - xmin), 4),
-                round((y - ymin) / (ymax - ymin), 4)]
-            for n, (x, y) in pos.items()}
+pos_norm = {n: [round(p[0], 4), round(p[1], 4)] for n, p in pos.items()}
+print(f"    layout source: {layout_source}")
 
 # Compact matrix for hover/details
 phi_dict = {ind: {k: round(float(v), 4) for k, v in phi.loc[ind].to_dict().items() if k != ind}
@@ -225,11 +240,11 @@ meta = {
     "density_pct": round(100 * total_M / (len(countries) * len(indicators)), 1),
     "p90_phi":    round(p90, 4),
     "clusters": [
-        {"label": "1A", "name": "Rule of Law — core",                "mean_ICI": 3.45, "color": "#0d2c5e"},
-        {"label": "1B", "name": "Openness & Security",               "mean_ICI": 2.98, "color": "#1c5cb5"},
-        {"label": "2A", "name": "Regulation & Trade Barriers",       "mean_ICI": 2.34, "color": "#d97706"},
-        {"label": "2B", "name": "Monetary System",                   "mean_ICI": 1.93, "color": "#eab308"},
-        {"label": "3",  "name": "Residual (fiscal + labor)",         "mean_ICI": 1.25, "color": "#6b7280"},
+        {"label": "1A", "name": "Rule of Law — core",                "mean_ICI": 3.45, "color": "#7B0000"},
+        {"label": "1B", "name": "Openness & Security",               "mean_ICI": 2.98, "color": "#FF1744"},
+        {"label": "2A", "name": "Regulation & Trade Barriers",       "mean_ICI": 2.34, "color": "#002171"},
+        {"label": "2B", "name": "Monetary System",                   "mean_ICI": 1.93, "color": "#448AFF"},
+        {"label": "3",  "name": "Residual (fiscal + labor)",         "mean_ICI": 1.25, "color": "#9E9E9E"},
     ],
 }
 with open(PORTAL / "meta.json", "w", encoding="utf-8") as f:
