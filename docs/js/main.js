@@ -10,6 +10,17 @@ const CLUSTER_COLORS = {
   "2B": "#448AFF",   // vivid blue  — Monetary system
   "3":  "#9E9E9E",   // grey        — Residual
 };
+// Pastel halo around each node — same hue, lighter shade (matches paper figure)
+const CLUSTER_HALO = {
+  "1A": "#FFCDD2",
+  "1B": "#FFEBEE",
+  "2A": "#BBDEFB",
+  "2B": "#E3F2FD",
+  "3":  "#F0F0F0",
+};
+// Macro-cluster grouping for edge colouring: 1A/1B = Rule of Law, 2A/2B = Trade
+const CLUSTER_MACRO = {"1A":"R", "1B":"R", "2A":"T", "2B":"T", "3":"O"};
+const MACRO_EDGE_COLOR = {"R": "#7B0000", "T": "#002171", "O": "#BBBBBB"};
 const CLUSTER_NAMES = {
   "1A": "Rule of Law — core",
   "1B": "Openness & Security",
@@ -114,29 +125,55 @@ function setupICI() {
 // ─── Indicator Space (Plotly network, layout precomputed in build_portal.py) ─
 function renderIndicatorSpace() {
   const country = document.getElementById("space-country-select").value;
+  const showNames = document.getElementById("space-show-names")?.checked;
   const inds = DATA.indicators;
   const pos = DATA.proximity.positions;
+  const indToCluster = Object.fromEntries(inds.map(d => [d.ind, d.cluster]));
 
-  // Two edge layers: MST (stronger) and P90 extras (lighter)
-  const mstX = [], mstY = [];
+  // ── Edge layers ─────────────────────────────────────────────────────────
+  // P90 extras: faint grey background
+  // MST same-macro:   coloured by macro cluster (dark red for Rule of Law,
+  //                    dark navy for Trade & Business)
+  // MST cross-macro:  neutral grey
   const p90X = [], p90Y = [];
+  const edgesByGroup = {R: [], T: [], cross: []};   // R = Rule of Law, T = Trade
   DATA.proximity.edges.forEach(e => {
     const a = pos[e.source], b = pos[e.target];
     if (!a || !b) return;
-    if (e.kind === "mst") { mstX.push(a[0], b[0], null); mstY.push(a[1], b[1], null); }
-    else                  { p90X.push(a[0], b[0], null); p90Y.push(a[1], b[1], null); }
+    if (e.kind === "p90") {
+      p90X.push(a[0], b[0], null); p90Y.push(a[1], b[1], null);
+      return;
+    }
+    const ma = CLUSTER_MACRO[indToCluster[e.source]];
+    const mb = CLUSTER_MACRO[indToCluster[e.target]];
+    if (ma === mb && (ma === "R" || ma === "T")) edgesByGroup[ma].push([a, b, e.phi]);
+    else edgesByGroup.cross.push([a, b, e.phi]);
   });
+
   const edgeP90 = {
     x: p90X, y: p90Y, mode: "lines", type: "scatter",
-    line: {width: 0.5, color: "rgba(170,170,170,0.35)"},
+    line: {width: 0.5, color: "rgba(170,170,170,0.30)"},
     hoverinfo: "none", showlegend: false,
   };
-  const edgeMST = {
-    x: mstX, y: mstY, mode: "lines", type: "scatter",
-    line: {width: 1.3, color: "rgba(70,70,70,0.55)"},
-    hoverinfo: "none", showlegend: false,
-  };
+  const mstTraces = [];
+  ["R", "T", "cross"].forEach(grp => {
+    const xs = [], ys = [];
+    edgesByGroup[grp].forEach(([a, b]) => {
+      xs.push(a[0], b[0], null); ys.push(a[1], b[1], null);
+    });
+    if (!xs.length) return;
+    mstTraces.push({
+      x: xs, y: ys, mode: "lines", type: "scatter",
+      line: {
+        width: grp === "cross" ? 1.0 : 1.6,
+        color: grp === "cross" ? "rgba(160,160,160,0.55)"
+                               : MACRO_EDGE_COLOR[grp] + "AA",
+      },
+      hoverinfo: "none", showlegend: false,
+    });
+  });
 
+  // ── Nodes ──────────────────────────────────────────────────────────────
   const clusterOrder = ["1A", "1B", "2A", "2B", "3"];
   const specs = country
     ? new Set(DATA.specialization[country]
@@ -147,9 +184,25 @@ function renderIndicatorSpace() {
 
   const minICI = Math.min(...inds.map(d => d.ICI));
   const maxICI = Math.max(...inds.map(d => d.ICI));
-  const sizeFor = ici => 14 + ((ici - minICI) / (maxICI - minICI)) * 36;
+  const sizeFor = ici => 14 + ((ici - minICI) / (maxICI - minICI)) * 34;
 
-  const traces = [edgeP90, edgeMST];
+  // First: a halo layer (larger, pastel) — drawn for every cluster as one trace
+  const haloTrace = {
+    x: inds.map(d => pos[d.ind][0]),
+    y: inds.map(d => pos[d.ind][1]),
+    mode: "markers", type: "scatter",
+    marker: {
+      size: inds.map(d => sizeFor(d.ICI) * 1.45),
+      color: inds.map(d =>
+        !specs ? CLUSTER_HALO[d.cluster]
+               : specs.has(d.ind) ? CLUSTER_HALO[d.cluster] : "rgba(220,220,220,0.35)"),
+      line: {width: 0},
+    },
+    hoverinfo: "skip", showlegend: false,
+  };
+
+  const traces = [edgeP90, ...mstTraces, haloTrace];
+
   clusterOrder.forEach(cl => {
     const items = inds.filter(d => d.cluster === cl);
     if (!items.length) return;
@@ -165,9 +218,9 @@ function renderIndicatorSpace() {
         size: items.map(d => sizeFor(d.ICI)),
         color: items.map(d =>
           !specs ? CLUSTER_COLORS[cl] :
-          specs.has(d.ind) ? CLUSTER_COLORS[cl] : "rgba(200,200,200,0.45)"),
+          specs.has(d.ind) ? CLUSTER_COLORS[cl] : "rgba(200,200,200,0.5)"),
         line: {
-          width: items.map(d => specs && specs.has(d.ind) ? 2.5 : 0.8),
+          width: items.map(d => specs && specs.has(d.ind) ? 2.2 : 1),
           color: items.map(d => specs && specs.has(d.ind) ? "#000" : "white"),
         },
       },
@@ -178,15 +231,43 @@ function renderIndicatorSpace() {
     });
   });
 
+  // ── Optional indicator-name labels next to nodes ───────────────────────
+  const annotations = [];
+  if (showNames) {
+    // Place each label slightly outward from the graph center
+    const allX = inds.map(d => pos[d.ind][0]);
+    const allY = inds.map(d => pos[d.ind][1]);
+    const cx = allX.reduce((a, b) => a + b, 0) / allX.length;
+    const cy = allY.reduce((a, b) => a + b, 0) / allY.length;
+    inds.forEach(d => {
+      const [x, y] = pos[d.ind];
+      const dx = x - cx, dy = y - cy;
+      const norm = Math.max(Math.hypot(dx, dy), 0.01);
+      const off = 0.025 + (sizeFor(d.ICI) / 1500);
+      const fullText = d.title.split(" ").slice(1).join(" ");
+      const isPale = specs && !specs.has(d.ind);
+      annotations.push({
+        x: x + (dx / norm) * off,
+        y: y + (dy / norm) * off,
+        text: fullText,
+        showarrow: false,
+        font: {size: 8.5, color: isPale ? "#aaa" : "#444"},
+        xanchor: dx >= 0 ? "left" : "right",
+        yanchor: dy >= 0 ? "bottom" : "top",
+      });
+    });
+  }
+
   const layout = {
     showlegend: true,
     legend: {orientation: "h", x: 0, y: -0.05, font: {size: 11}},
-    xaxis: {visible: false, range: [-0.05, 1.05]},
-    yaxis: {visible: false, range: [-0.05, 1.05], scaleanchor: "x"},
+    xaxis: {visible: false, range: [-0.08, 1.08]},
+    yaxis: {visible: false, range: [-0.08, 1.08], scaleanchor: "x"},
     margin: {t: 20, l: 20, r: 20, b: 80},
     paper_bgcolor: "white",
     plot_bgcolor: "#fafafa",
     hovermode: "closest",
+    annotations: annotations,
   };
 
   Plotly.newPlot("space-plot", traces, layout,
@@ -204,6 +285,7 @@ function setupIndicatorSpace() {
     sel.appendChild(opt);
   });
   sel.addEventListener("change", renderIndicatorSpace);
+  document.getElementById("space-show-names").addEventListener("change", renderIndicatorSpace);
 }
 
 // ─── World Map ─────────────────────────────────────────────────────────────
